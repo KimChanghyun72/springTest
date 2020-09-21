@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+	<!-- <bean name="tv" class="com.yedam.app.ioc.LgTV" /> -->
+	<context:component-scan base-package="com.yedam.app"/>
+	<!-- bean 자동등록. 등록할 클래스는 @Component를 입력해줘야 됨. -->
+	<!-- <bean name="sony" 
+	class="com.yedam.app.ioc.SonySpeaker" 
+	scope="prototype" /> -->
+	<!-- <bean name="sony" class="com.yedam.app.ioc.SonySpeaker"/>
+	<bean name="apple" class="com.yedam.app.ioc.AppleSpeaker"/>
+	<bean name="tv" class="com.yedam.app.ioc.LgTV">
+		<property name="speaker" ref="sony"></property> name은 필드명과 일치, ref는 등록할 bean name과 일치.
+	 </bean>-->
+	 <aop:aspectj-autoproxy proxy-target-class="true"/> 
+
+<bean id="logAdvice" class="com.yedam.app.aop.LogAdvice"></bean>
+<bean id="afterAdvice" class="com.yedam.app.aop.AfterReturningAdvice"></bean>
+<aop:config>
+	<aop:pointcut expression="execution(* com.yedam.app..*.*(..))" id="allpointcut"/><!-- 어드바이스가 적용될 메소드를 설정 -->
+	<!-- <aop:pointcut expression="execution(* com.yedam.app..*.*(..))" id="allpointcut"/> -->
+	<aop:pointcut expression="execution(* com.yedam.app..*.select*(..))" id="selectPointcut"/>
+	<aop:aspect ref="logAdvice">
+		<aop:before method="printLog" pointcut-ref="allpointcut"/> <!-- pointcut-ref가 실행되기 전에 logAdvice의 printLog를 실행 -->
+	</aop:aspect>
+	<aop:aspect ref="afterAdvice">
+		<aop:after-returning method="afterLog" pointcut-ref="selectPointcut" returning="returnObj"/>
+	</aop:aspect>
+</aop:config>
+</beans>
