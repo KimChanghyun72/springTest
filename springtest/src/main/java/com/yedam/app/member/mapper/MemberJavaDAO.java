@@ -1,4 +1,4 @@
-package com.yedam.app.member;
+package com.yedam.app.member.mapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,9 +12,10 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.yedam.app.common.ConnectionManager;
+import com.yedam.app.member.MemberVO;
 
-@Component //스프링 컨테이너가 관리하도록 빈 등록. //스프링 컨테이너는 기본적으로 싱글톤으로 관리.
-public class MemberDAO implements DAO {
+//@Component //스프링 컨테이너가 관리하도록 빈 등록. //스프링 컨테이너는 기본적으로 싱글톤으로 관리.
+public class MemberJavaDAO implements MemberDAO {
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs = null;
@@ -29,7 +30,7 @@ public class MemberDAO implements DAO {
 	}*/
 	
 	@Override
-	public ArrayList<MemberVO> selectAll(MemberVO memberVO) {
+	public ArrayList<MemberVO> selectAll() {
 		MemberVO resultVO = null;
 		ArrayList<MemberVO> list = new ArrayList<MemberVO>();
 		try {
@@ -114,14 +115,15 @@ public class MemberDAO implements DAO {
 	}//end of delete
 	
 	@Override
-	public void update(MemberVO memberVO) {
+	public int update(MemberVO memberVO) {
+		int r=0;
 		try {
 			conn = ConnectionManager.getConnnect();
 			String sql = "UPDATE MEMBER SET REASON = ? , WHERE ID=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, memberVO.getReason());
 			pstmt.setString(2, memberVO.getId());
-			int r = pstmt.executeUpdate();
+			r = pstmt.executeUpdate();
 			System.out.println(r+"건이 수정됨.");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -130,6 +132,7 @@ public class MemberDAO implements DAO {
 			ConnectionManager.close(null, pstmt, conn);
 		}
 		
+		return r;
 	}//end of update
 	
 	@Override

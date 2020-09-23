@@ -19,18 +19,19 @@
 		<property name="speaker" ref="sony"></property> name은 필드명과 일치, ref는 등록할 bean name과 일치.
 	 </bean>-->
 	 <aop:aspectj-autoproxy proxy-target-class="true"/> 
-
+<!--  
 <bean id="logAdvice" class="com.yedam.app.aop.LogAdvice"></bean>
 <bean id="afterAdvice" class="com.yedam.app.aop.AfterReturningAdvice"></bean>
 <aop:config>
-	<aop:pointcut expression="execution(* com.yedam.app..*.*(..))" id="allpointcut"/><!-- 어드바이스가 적용될 메소드를 설정 -->
-	<!-- <aop:pointcut expression="execution(* com.yedam.app..*.*(..))" id="allpointcut"/> -->
+	<aop:pointcut expression="execution(* com.yedam.app..*.*(..))" id="allpointcut"/>어드바이스가 적용될 메소드를 설정
+	<aop:pointcut expression="execution(* com.yedam.app..*.*(..))" id="allpointcut"/>
 	<aop:pointcut expression="execution(* com.yedam.app..*.select*(..))" id="selectPointcut"/>
 	<aop:aspect ref="logAdvice">
-		<aop:before method="printLog" pointcut-ref="allpointcut"/> <!-- pointcut-ref가 실행되기 전에 logAdvice의 printLog를 실행 -->
+		<aop:before method="printLog" pointcut-ref="allpointcut"/> pointcut-ref가 실행되기 전에 logAdvice의 printLog를 실행
 	</aop:aspect>
 	<aop:aspect ref="afterAdvice">
 		<aop:after-returning method="afterLog" pointcut-ref="selectPointcut" returning="returnObj"/>
 	</aop:aspect>
 </aop:config>
+ --> 
 </beans>

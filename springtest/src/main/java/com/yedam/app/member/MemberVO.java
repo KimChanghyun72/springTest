@@ -2,9 +2,9 @@ package com.yedam.app.member;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 public class MemberVO {
 	private String id;
 	private String password;
