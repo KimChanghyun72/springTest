@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.app.board.mapper.BoardDAO">
+
+	<resultMap type="board" id="boardMap">
+		<id property="board_no" column="NO"/>
+		<result property="board_subject" column="SUBJECT" />
+		<result property="board_poster" column="poster" />
+		<result property="contents" column="contents" />
+		<result property="lastpost" column="lastpost" />
+		<result property="views" column="views" />
+		<result property="filename" column="filename" />
+	</resultMap>
+	
+	<select id="selectMap" resultType="map">
+		SELECT NO   as "no",
+		SUBJECT     as "subject",
+		CONTENTS    as "contents",
+		POSTER,
+		LASTPOST,
+		VIEWS,
+		FILENAME,
+		GENDER,
+		ROLE   
+		FROM BOARD, users
+		WHERE BOARD.POSTER = USERS.ID ORDER BY NO
+	</select>	
+	
+	<select id="selectCnt" resultType="int">
+		SELECT COUNT(*) FROM BOARD
+	</select>
+	
+	<!-- 게시글 전체조회 -->
+	<select id="selectAll" resultType="board" parameterType="board"> <!-- resultType의 경우는 그냥 변수를 담는데 resultMap은 매칭되어야만 변수를 할당해줌. 편한건 alias-->
+		
+	SELECT A.* FROM (SELECT ROWNUM RN, B.* FROM(
+		SELECT  no            board_no,             
+				subject       board_subject, 
+				poster        board_poster, 
+				contents,
+				lastpost,
+				views,
+				filename
+		FROM BOARD
+		<where>
+		<if test="boardPoster != null and boardPoster != ''">
+		poster LIKE '%'||#{board_poster}||'%'
+		<!-- order by ${sortCol} DESC -->
+		</if>
+		<if test="boardSubject != null and boardSubject != ''">
+		and SUBJECT LIKE '%' || #{board_subject} || '%'
+		</if>
+		</where>
+		ORDER BY NO DESC
+) B ) A WHERE RN BETWEEN #{first} and #{last}
+	</select>
+	<!-- 게시글 등록-->
+	<insert id="insert" parameterType="board">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select nvl(max(no),0) + 1 from board
+		</selectKey>
+		insert into board
+		(no, poster, subject, contents
+		<if test="filename != null and filename != ''">
+		,filename
+		<!-- order by ${sortCol} DESC -->
+		</if>
+		)
+		values (#{no}, #{poster}, #{subject}, #{contents}, 
+		<if test="filename != null and filename != ''">
+		,#{filename}
+		</if>
+		)
+		
+	</insert>
+	
+	<delete id="deleteAll" parameterType="board">
+		DELETE FROM BOARD
+		WHERE NO IN 
+		<foreach collection="nos" item="i" open="(" close=")" separator=",">
+			#{i}
+		</foreach>
+	</delete>
+</mapper>

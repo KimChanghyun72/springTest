@@ -1,6 +1,7 @@
 package com.yedam.app.member.web;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,9 +30,18 @@ public class MemberController {
 	@Autowired MemberService memberService;
 	
 	
+	@RequestMapping("/memberOneAjax")
+	@ResponseBody  //ajax값으로 넘겨줌.
+	public MemberVO memberOneAjax(MemberVO memberVO) {
+		//회원조회
+		return memberService.selectOne(memberVO);
+	}
+	
+	
+	
 	@RequestMapping("/memberListAjax")
-	@ResponseBody
-	public ArrayList<MemberVO> memberListAjax() {
+	@ResponseBody  //ajax값으로 넘겨줌.
+	public List<MemberVO> memberListAjax() {
 		//회원조회
 		return memberService.selectAll();
 	}

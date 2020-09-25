@@ -4,18 +4,21 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- SqlSession setup for MyBatis Database Layer Spring과 Mybatis 연동 설정 -->
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-	    <property name="configLocation" value="classpath:sql-map-config-spring.xml" />
-		<property name="mapperLocations" value="classpath:/mapper/*.xml" />
+		<property name="configLocation"
+			value="classpath:sql-map-config-spring.xml" />
+		<property name="mapperLocations"
+			value="classpath:/mapper/*.xml" /><!-- mapper패키지 안에 있는 거 다 읽음. -->
 	</bean>
-	
 	<!-- SqlSessionTemplate -->
 	<bean class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSession"></constructor-arg>
-	</bean> 
-	
+	</bean>
+
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-	  <property name="basePackage" value="com.dbal.**.mapper" />
+		<property name="basePackage" value="com.yedam.**.mapper" /><!-- com.yedam.모든것 .mapper로 끝남. -->
+																	<!-- com.yedam.아래의 모든 mapper를 가져오기 위한 구문. -->
 	</bean>
 </beans>

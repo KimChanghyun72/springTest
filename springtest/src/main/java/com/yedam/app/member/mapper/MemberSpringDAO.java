@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.yedam.app.member.MemberVO;
 
-@Component
+//@Component
 public class MemberSpringDAO implements MemberDAO{
 
 	@Autowired JdbcTemplate template;

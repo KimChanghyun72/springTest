@@ -1,12 +1,13 @@
 package com.yedam.app.member.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.yedam.app.member.MemberVO;
 
 public interface MemberService {
 
-	ArrayList<MemberVO> selectAll();
+	List<MemberVO> selectAll();
 
 	MemberVO selectOne(MemberVO memberVO);
 
